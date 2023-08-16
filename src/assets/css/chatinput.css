@@ -1,0 +1,132 @@
+.chat-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.chat-input .media-preview {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: 65px;
+  left: 0;
+  background-color: white;
+  width: 100%;
+}
+
+.chat-input .media-preview .image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.media-preview .image-preview .image-item {
+  height: 80px;
+  width: 100px;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.media-preview .image-preview .image-item img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.media-preview .image-preview .image-item i {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.media-preview .file-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.media-preview .file-wrapper i {
+  cursor: pointer;
+}
+
+.media-preview .file-wrapper span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chat-input textarea {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  resize: none;
+}
+
+.chat-input .input-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.chat-input .input-icon:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.chat-input .input-icon i {
+  transition: transform 0.3s;
+  font-size: 1.2rem;
+}
+
+.chat-input .input-icon.active i {
+  transform: rotate(45deg);
+}
+
+.chat-input .media-input-wrapper {
+  position: absolute;
+  bottom: 60px;
+  left: 15px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: var(--box-shadow);
+}
+
+.chat-input .media-input-wrapper .media-item {
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.chat-input .media-input-wrapper .media-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.chat-input .media-input-wrapper .media-item i {
+  width: 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

@@ -1,0 +1,177 @@
+.profile {
+  position: absolute;
+  width: 350px;
+  min-height: 100vh;
+  height: 100%;
+  background-color: white;
+  transition: all 0.5s;
+  transform: translateX(-100%);
+  opacity: 0;
+  z-index: 100;
+}
+
+.profile.active {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.profile-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-topbar {
+  height: 65px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.profile-heading {
+  font-size: 1.2rem;
+}
+
+.profile-close-icon {
+  height: 35px;
+  width: 35px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.profile-close-icon:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.profile-close-icon i {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.profile-infos {
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-infos .avatar-wrapper {
+  position: relative;
+  height: 150px;
+  width: 150px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.profile-infos .avatar-wrapper .avatar {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.profile-infos .avatar-wrapper i {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.profile-infos .avatar-wrapper i:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profile-infos .profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+
+.profile-infos .profile-form input,
+.profile-infos .profile-form textarea {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  border: 1px solid gray;
+  background-color: transparent;
+  outline: none;
+}
+
+.profile-infos .profile-form textarea {
+  resize: none;
+  height: 120px;
+}
+
+.profile-infos .username {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.profile-infos .status {
+  font-style: italic;
+  color: gray;
+}
+
+.profile-infos .edit-btn {
+  padding: 0.4rem 0.6rem;
+  width: max-content;
+  background-color: #333;
+  border: none;
+  border-radius: 0.3rem;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #444;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-actions button {
+  padding: 0.4rem 0.6rem;
+  width: 100px;
+  border: none;
+  border-radius: 0.3rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.profile-actions .cancel-btn {
+  color: #333;
+  background-color: lightgray;
+}
+
+.profile-actions .save-btn {
+  color: white;
+  background-color: #333;
+}
+
+@media (max-width: 820px) {
+  .profile {
+    width: 300px;
+  }
+}
+
+@media (max-width: 580px) {
+  .profile {
+    width: 100%;
+  }
+}

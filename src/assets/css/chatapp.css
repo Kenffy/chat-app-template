@@ -1,0 +1,19 @@
+.chat-app {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.app-container {
+  max-width: 1366px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+  border: var(--border);
+}
