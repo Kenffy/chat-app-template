@@ -8,7 +8,7 @@ import { useState } from "react";
 import { ChatApp } from "./pages/ChatApp";
 
 function App() {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
 
   return (
     <BrowserRouter>

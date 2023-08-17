@@ -1,0 +1,79 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #333;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  font-size: 2rem;
+}
+
+.form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form .errormsg {
+  font-size: 14px;
+  color: red;
+}
+
+.form input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.3rem;
+  border: 1px solid gray;
+  font-size: 1.2rem;
+  background-color: transparent;
+  outline: none;
+}
+
+.form button {
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.3rem;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: #333;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: #444;
+}
+
+.form .link {
+  text-align: right;
+}
+
+.form .link a {
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form .link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 580px) {
+  .wrapper {
+    width: 90%;
+    padding: 1rem 1.5rem;
+  }
+}
