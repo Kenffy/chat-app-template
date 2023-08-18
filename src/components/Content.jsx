@@ -10,7 +10,7 @@ import {
 } from "../services/services";
 import { onSnapshot } from "@firebase/firestore";
 
-export const Content = ({ user, chat, setChat, setOnChat }) => {
+export const Content = ({ user, chat, onChat, setChat, setOnChat }) => {
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
   const [message, setMessage] = useState("");
@@ -87,7 +87,13 @@ export const Content = ({ user, chat, setChat, setOnChat }) => {
         <div className="content-wrapper">
           <div className="content-top">
             <div className="avatar-infos">
-              <div onClick={() => setOnChat(false)} className="back-icon">
+              <div
+                onClick={() => {
+                  setChat(null);
+                  setOnChat(false);
+                }}
+                className="back-icon"
+              >
                 <i className="fa-solid fa-chevron-left"></i>
               </div>
               <div className="avatar-wrapper">
@@ -111,7 +117,7 @@ export const Content = ({ user, chat, setChat, setOnChat }) => {
               <i className="fa-solid fa-ellipsis"></i>
               {onMenu && (
                 <div className="menu-wrapper">
-                  <span className="menu-item" onClick={() => setChat(false)}>
+                  <span className="menu-item" onClick={() => setChat(null)}>
                     Close Chat
                   </span>
                   <span className="menu-item">Delete Messages</span>

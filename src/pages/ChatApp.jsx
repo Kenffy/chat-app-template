@@ -60,6 +60,7 @@ export const ChatApp = () => {
         <Content
           user={user}
           chat={currentChat}
+          onChat={onChat}
           setChat={setCurrentChat}
           setOnChat={setOnChat}
         />
