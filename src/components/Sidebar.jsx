@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../assets/css/sidebar.css";
 import NoAvatar from "../assets/images/avatar.png";
 import { ChatItem } from "./ChatItem";
 import { Profile } from "./Profile";
 import { UserList } from "./UserList";
+import { Context } from "../context/Context";
+import { signOutUser } from "../context/Actions";
 
-export const Sidebar = ({ setChat }) => {
+export const Sidebar = ({
+  chats,
+  setChats,
+  currentChat,
+  filteredChats,
+  handleSearchChat,
+  setFilteredChats,
+  handleCurrentChat,
+}) => {
+  const { dispatch, currentUser } = useContext(Context);
   const [onMenu, setOnMenu] = useState(false);
   const [onProfile, setOnProfile] = useState(false);
   const [onNewChat, setOnNewChat] = useState(false);
@@ -13,11 +24,21 @@ export const Sidebar = ({ setChat }) => {
   return (
     <div className="sidebar">
       <Profile open={onProfile} setOpen={setOnProfile} />
-      <UserList open={onNewChat} setOpen={setOnNewChat} />
+      <UserList
+        open={onNewChat}
+        setOpen={setOnNewChat}
+        chats={chats}
+        setChats={setChats}
+        setFilteredChats={setFilteredChats}
+        handleCurrentChat={handleCurrentChat}
+      />
       <div className="sidebar-wrapper">
         <div className="sidebar-top">
           <div className="user-wrapper" onClick={() => setOnProfile(true)}>
-            <img src={NoAvatar} alt="" />
+            <img
+              src={currentUser?.profile ? currentUser.profile.url : NoAvatar}
+              alt=""
+            />
           </div>
           <div
             className="menu-icon"
@@ -40,7 +61,10 @@ export const Sidebar = ({ setChat }) => {
                   <i className="fa-solid fa-circle-half-stroke"></i>
                   Dark Mode
                 </span>
-                <span className="menu-item">
+                <span
+                  className="menu-item"
+                  onClick={() => dispatch(signOutUser())}
+                >
                   <i className="fa-solid fa-right-from-bracket"></i>
                   Logout
                 </span>
@@ -51,24 +75,25 @@ export const Sidebar = ({ setChat }) => {
 
         <div className="sidebar-middle">
           <div className="search-wrapper">
-            <input type="text" placeholder="Search Chat" />
+            <input
+              onChange={handleSearchChat}
+              type="text"
+              placeholder="Search Chat"
+            />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
 
         <div className="sidebar-bottom">
           <div className="chats-wrapper">
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
-            <ChatItem setChat={setChat} />
+            {filteredChats.map((chat) => (
+              <ChatItem
+                key={chat?.id}
+                setChat={() => handleCurrentChat(chat)}
+                chat={chat}
+                currentChat={currentChat}
+              />
+            ))}
           </div>
         </div>
       </div>

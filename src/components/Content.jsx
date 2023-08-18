@@ -1,22 +1,84 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../assets/css/content.css";
 import NoAvatar from "../assets/images/avatar.png";
 import { Message } from "./Message";
 import { ChatInput } from "./ChatInput";
+import {
+  createMessageAsync,
+  dataFromSnapshot,
+  getMsgQueryByConversationId,
+} from "../services/services";
+import { onSnapshot } from "@firebase/firestore";
 
-export const Content = ({ chat, setChat }) => {
+export const Content = ({ user, chat, setChat, setOnChat }) => {
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [medias, setMedias] = useState({
     images: [],
     audio: null,
     document: null,
   });
 
-  const handleClick = () => {
-    setChat(false);
-    console.log(message, medias);
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const q = getMsgQueryByConversationId(chat.id);
+        onSnapshot(q, (querySnapshot) => {
+          let tmpMessages = [];
+          querySnapshot.forEach((doc) => {
+            tmpMessages.push(dataFromSnapshot(doc));
+          });
+          setMessages(tmpMessages);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    chat && loadMessages();
+  }, [chat]);
+
+  useEffect(() => {
+    return scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleCreateMessage = async () => {
+    if (!chat) return;
+
+    try {
+      const msg = {
+        conversationId: chat?.id,
+        sender: user.uid,
+        receiver: chat?.friend?.id,
+        message,
+        viewed: false,
+        images: [],
+        audio: null,
+        document: null,
+      };
+
+      const res = await createMessageAsync(msg, medias);
+      console.log(res);
+      setMessage("");
+      setMedias((prev) => ({
+        ...prev,
+        images: [],
+        audio: null,
+        document: null,
+      }));
+      if (res) {
+        setMessages((prev) => [...prev, res]);
+        setChat((prev) => ({
+          ...prev,
+          last: { message: res.message, createdAt: res.createdAt },
+        }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -25,12 +87,18 @@ export const Content = ({ chat, setChat }) => {
         <div className="content-wrapper">
           <div className="content-top">
             <div className="avatar-infos">
-              <div onClick={handleClick} className="back-icon">
+              <div onClick={() => setOnChat(false)} className="back-icon">
                 <i className="fa-solid fa-chevron-left"></i>
               </div>
               <div className="avatar-wrapper">
-                <img src={NoAvatar} alt="" className="avatar" />
-                <span className="username">Max Well</span>
+                <img
+                  src={
+                    chat?.friend?.profile ? chat?.friend.profile.url : NoAvatar
+                  }
+                  alt=""
+                  className="avatar"
+                />
+                <span className="username">{chat?.friend?.username}</span>
               </div>
             </div>
 
@@ -55,24 +123,14 @@ export const Content = ({ chat, setChat }) => {
 
           <div className="content-middle">
             <div className="messages-wrapper">
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
+              {messages.map((msg) => (
+                <Message
+                  key={msg?.id}
+                  msg={msg}
+                  scrollRef={scrollRef}
+                  owner={msg?.sender === user?.uid}
+                />
+              ))}
             </div>
           </div>
           <div className="content-bottom">
@@ -83,6 +141,7 @@ export const Content = ({ chat, setChat }) => {
               setMedias={setMedias}
               message={message}
               setMessage={setMessage}
+              handleCreate={handleCreateMessage}
             />
           </div>
         </div>

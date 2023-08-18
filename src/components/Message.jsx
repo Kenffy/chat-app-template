@@ -1,18 +1,21 @@
+import { format } from "timeago.js";
 import "../assets/css/message.css";
 
-export const Message = ({ owner }) => {
+export const Message = ({ owner, scrollRef, msg }) => {
   return (
     <div className={owner ? "message owner" : "message"}>
       <div className="message-wrapper">
-        <div className="image-wrapper">
-          <img
-            src="https://ichef.bbci.co.uk/images/ic/1200xn/p0d263np.png"
-            alt=""
-          />
-        </div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        {msg?.images.length > 0 && (
+          <div className="image-wrapper">
+            <img src={msg.images[0].url} alt="" />
+            {msg?.images.length > 1 && (
+              <div className="image-count">+{msg?.images.length - 1}</div>
+            )}
+          </div>
+        )}
+        <p>{msg?.message}</p>
       </div>
-      <span>2 days ago</span>
+      <span ref={scrollRef}>{format(msg?.createdAt)}</span>
     </div>
   );
 };

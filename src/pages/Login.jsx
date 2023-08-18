@@ -1,8 +1,13 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import styles from "../assets/css/login.module.css";
 import { loginAsync } from "../services/authServices";
+import { getUserAsync } from "../services/services";
+import { signInUser } from "../context/Actions";
+import { Context } from "../context/Context";
 
 export const Login = () => {
+  const { dispatch } = useContext(Context);
+
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState("");
@@ -35,13 +40,18 @@ export const Login = () => {
     try {
       const res = await loginAsync(creds);
       if (res?.user) {
-        console.log(res.user);
-        clearData();
-        setLoading(false);
+        const currUser = await getUserAsync(res.user.uid);
+        console.log(currUser);
+        if (currUser) {
+          dispatch(signInUser({ user: res.user, currentUser: currUser }));
+          clearData();
+          setLoading(false);
+        }
       }
     } catch (err) {
-      var message = err.code.split("/")[1].replace("-", " ");
-      message = message.replace("-", " ");
+      // var message = err.code.split("/")[1].replace("-", " ");
+      // message = message.replace("-", " ");
+      var message = err.code;
       setError(message);
       setLoading(false);
     }

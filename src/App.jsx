@@ -3,12 +3,13 @@ import "./assets/css/app.css";
 //import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { useState } from "react";
+import { useContext, useState } from "react";
 //import { Messenger } from "./pages/Messenger";
 import { ChatApp } from "./pages/ChatApp";
+import { Context } from "./context/Context";
 
 function App() {
-  const [user, setUser] = useState(false);
+  const { user } = useContext(Context);
 
   return (
     <BrowserRouter>

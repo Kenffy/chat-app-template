@@ -1,11 +1,38 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import "../assets/css/profile.css";
 import NoAvatar from "../assets/images/avatar.png";
+import { Context } from "../context/Context";
+import { v4 as getID } from "uuid";
+import { updateUserAsync } from "../services/services";
+import { updateProfile } from "../context/Actions";
+import {
+  UPDATE_PROFILE_FAILED,
+  UPDATE_PROFILE_START,
+} from "../context/Constants";
 
 export const Profile = ({ open, setOpen }) => {
+  const { currentUser, user, dispatch, loading } = useContext(Context);
   const [onEdit, setOnEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleImages = (e) => {
+    const file = e.target.files[0];
+    const newImage = {
+      filename: getID() + file.name,
+      file: file,
+      type: "profile",
+    };
+    setProfileImage(newImage);
+  };
+
+  const handleOnEdit = () => {
+    if (!currentUser) return;
+    setUsername(currentUser.username);
+    setStatus(currentUser.description);
+    setOnEdit(true);
+  };
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -13,23 +40,38 @@ export const Profile = ({ open, setOpen }) => {
     setOnEdit(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username) return;
 
-    const user = {
-      username,
-      status: status ? status : "Hello from my country 😀",
-    };
-    console.log(user);
-    setOnEdit(false);
+    try {
+      dispatch({ type: UPDATE_PROFILE_START });
+      const user = {
+        username,
+        status: status ? status : "Hello from my country 😀",
+      };
+
+      const data = {
+        profile: profileImage,
+      };
+      const res = await updateUserAsync(user, data);
+      if (res) {
+        dispatch(updateProfile(res));
+      }
+      setOnEdit(false);
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: UPDATE_PROFILE_FAILED });
+    }
   };
 
   return (
     <div className={open ? "profile active" : "profile"}>
       <div className="profile-wrapper">
         <div className="profile-topbar">
-          <span className="profile-heading">Profile</span>
+          <span className="profile-heading">
+            {onEdit ? "Edit Profile" : "Profile"}
+          </span>
           <div className="profile-close-icon" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-xmark"></i>
           </div>
@@ -38,13 +80,38 @@ export const Profile = ({ open, setOpen }) => {
         {onEdit ? (
           <div className="profile-infos">
             <div className="avatar-wrapper">
-              <img src={NoAvatar} alt="" className="avatar" />
-              <i className="fa-solid fa-camera"></i>
+              {profileImage ? (
+                <img
+                  src={URL.createObjectURL(profileImage?.file)}
+                  alt=""
+                  className="avatar"
+                />
+              ) : (
+                <img
+                  src={
+                    currentUser?.profile ? currentUser.profile.url : NoAvatar
+                  }
+                  alt=""
+                  className="avatar"
+                />
+              )}
+              <label className="media-item" htmlFor="upload-images">
+                <input
+                  style={{ display: "none" }}
+                  accept=".jpg,.jpeg,.png"
+                  id="upload-images"
+                  type="file"
+                  multiple
+                  onChange={handleImages}
+                />
+                <i className="fa-solid fa-camera"></i>
+              </label>
             </div>
 
             <form className="profile-form" onSubmit={handleSubmit}>
               <input
                 onChange={(e) => setUsername(e.target.value)}
+                value={username}
                 required
                 type="text"
                 placeholder="Username"
@@ -52,14 +119,15 @@ export const Profile = ({ open, setOpen }) => {
               <textarea
                 onChange={(e) => setStatus(e.target.value)}
                 type="text"
+                value={status}
                 placeholder="Write something about you."
               />
               <div className="profile-actions">
                 <button onClick={handleCancel} className="cancel-btn">
                   Cancel
                 </button>
-                <button type="submit" className="save-btn">
-                  Save
+                <button disabled={loading} type="submit" className="save-btn">
+                  {loading ? "Saving..." : "Save"}
                 </button>
               </div>
             </form>
@@ -67,12 +135,16 @@ export const Profile = ({ open, setOpen }) => {
         ) : (
           <div className="profile-infos">
             <div className="avatar-wrapper">
-              <img src={NoAvatar} alt="" className="avatar" />
+              <img
+                src={currentUser?.profile ? currentUser.profile.url : NoAvatar}
+                alt=""
+                className="avatar"
+              />
             </div>
-            <span className="username">John Doe</span>
-            <span className="email">johndoe@example.com</span>
-            <p className="status">Hello from my country 😀</p>
-            <button onClick={() => setOnEdit(true)} className="edit-btn">
+            <span className="username">{currentUser?.username}</span>
+            <span className="email">{currentUser?.email}</span>
+            <p className="status">{currentUser?.description}</p>
+            <button onClick={handleOnEdit} className="edit-btn">
               Edit Profile
             </button>
           </div>

@@ -8,6 +8,7 @@ export const ChatInput = ({
   setMessage,
   setOnMedia,
   setMedias,
+  handleCreate,
 }) => {
   const handleImages = (e) => {
     const files = e.target.files;
@@ -167,7 +168,7 @@ export const ChatInput = ({
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Write a message"
       ></textarea>
-      <div className="input-icon">
+      <div className="input-icon" onClick={handleCreate}>
         <i className="fa-solid fa-paper-plane"></i>
       </div>
     </div>
