@@ -49,8 +49,6 @@ export const Login = () => {
         }
       }
     } catch (err) {
-      // var message = err.code.split("/")[1].replace("-", " ");
-      // message = message.replace("-", " ");
       var message = err.code;
       setError(message);
       setLoading(false);

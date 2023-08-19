@@ -1,10 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./assets/css/app.css";
-//import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { useContext, useState } from "react";
-//import { Messenger } from "./pages/Messenger";
+import { useContext } from "react";
+
 import { ChatApp } from "./pages/ChatApp";
 import { Context } from "./context/Context";
 

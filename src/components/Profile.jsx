@@ -20,7 +20,7 @@ export const Profile = ({ open, setOpen }) => {
   const handleImages = (e) => {
     const file = e.target.files[0];
     const newImage = {
-      filename: getID() + file.name,
+      filename: getID() + "-" + file.name,
       file: file,
       type: "profile",
     };
