@@ -19,7 +19,9 @@ export const ChatItem = ({ setChat, chat, currentChat }) => {
         <div className="user-infos">
           <span className="username">{chat?.friend?.username}</span>
           {chat?.last?.createdAt && (
-            <span className="timeline">{format(chat.last.createdAt)}</span>
+            <span className="timeline">
+              {format(chat.last.createdAt.toDate())}
+            </span>
           )}
         </div>
         <p className="last-message">
