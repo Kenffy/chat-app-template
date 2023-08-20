@@ -1,0 +1,67 @@
+.audio-player {
+  display: flex;
+  flex-direction: column;
+}
+
+.audio-filename {
+  font-weight: 500;
+  color: whitesmoke !important;
+  font-size: 14px !important;
+}
+
+.audio-controls {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 0.5rem;
+  gap: 0.3rem;
+}
+
+.audio-controls .audio-timeline {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  position: relative;
+  cursor: pointer;
+}
+
+.audio-controls .audio-timeline .progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.audio-controls .controls {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 0.3rem;
+}
+
+.audio-controls .controls button {
+  height: 20px;
+  width: 20px;
+  border-radius: 0.3rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.audio-controls .controls button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.controls .duration-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 14px;
+}

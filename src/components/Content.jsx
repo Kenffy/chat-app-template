@@ -10,7 +10,15 @@ import {
 } from "../services/services";
 import { onSnapshot } from "@firebase/firestore";
 
-export const Content = ({ user, chat, onChat, setChat, setOnChat }) => {
+export const Content = ({
+  user,
+  chat,
+  onChat,
+  setChat,
+  setOnChat,
+  setChats,
+  setFilteredChats,
+}) => {
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
   const [message, setMessage] = useState("");
@@ -47,6 +55,7 @@ export const Content = ({ user, chat, onChat, setChat, setOnChat }) => {
 
   const handleCreateMessage = async () => {
     if (!chat) return;
+    if (!message && !medias?.audio && medias?.images.length === 0) return;
 
     try {
       const msg = {
@@ -71,10 +80,17 @@ export const Content = ({ user, chat, onChat, setChat, setOnChat }) => {
       }));
       if (res) {
         setMessages((prev) => [...prev, res]);
-        setChat((prev) => ({
-          ...prev,
+        const currChat = {
+          ...chat,
           last: { message: res.message, createdAt: res.createdAt },
-        }));
+        };
+        setChat(currChat);
+        setChats((prev) => [
+          ...prev.map((c) => (c.id === currChat.id ? currChat : c)),
+        ]);
+        setFilteredChats((prev) => [
+          ...prev.map((c) => (c.id === currChat.id ? currChat : c)),
+        ]);
       }
     } catch (error) {
       console.log(error);

@@ -63,6 +63,8 @@ export const ChatApp = () => {
           onChat={onChat}
           setChat={setCurrentChat}
           setOnChat={setOnChat}
+          setChats={setChats}
+          setFilteredChats={setFilteredChats}
         />
       </div>
     </div>
