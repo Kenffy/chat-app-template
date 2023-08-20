@@ -21,7 +21,6 @@ import {
   where,
 } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import { async } from "@firebase/util";
 
 const uploadImages = async (images, location) => {
   let imagesUrls = [];
@@ -280,35 +279,6 @@ export const getUserConversationsAsync = async (user) => {
     console.log(error);
   }
 };
-
-// export const getUserConversationByIdAsync = async(id)=>{
-//     try {
-//         const user = auth.currentUser;
-//         const snapshots = await getDoc((collection(db, "conversations", id)));
-
-//         let conversations = [];
-
-//         for(const d of snapshots.docs){
-//             const conv = dataFromSnapshot(d);
-//             if(conv){
-//                 const friendId = conv.members.find(u=>u !== user.uid);
-//                 const res = await getDoc(doc(db, "users", friendId));
-//                 const usr = res.data();
-//                 conversations.push({
-//                     ...conv,
-//                     friend:{
-//                         id: friendId,
-//                         username: usr.username,
-//                         profile: usr.profile,
-//                     }
-//                 });
-//             }
-//         }
-//         return conversations;
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
 
 export const createMessageAsync = async (message, data) => {
   try {

@@ -23,9 +23,9 @@ export const ChatItem = ({ setChat, chat, currentChat }) => {
           )}
         </div>
         <p className="last-message">
-          {chat?.last
+          {chat?.last?.message
             ? chat.last.message
-            : `You: Say Hi! to ${chat.friend.username}`}
+            : `You: Say hi! to ${chat.friend.username}`}
         </p>
       </div>
     </div>
