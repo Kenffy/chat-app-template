@@ -3,7 +3,8 @@
   width: 350px;
   min-height: 100vh;
   height: 100%;
-  background-color: white;
+  background-color: var(--blue);
+  color: white;
   transition: all 0.5s;
   transform: translateX(-100%);
   opacity: 0;
@@ -43,12 +44,12 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
 .profile-close-icon:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .profile-close-icon i {
@@ -104,9 +105,15 @@
   padding: 0.5rem 0.8rem;
   border-radius: 0.3rem;
   font-size: 1rem;
-  border: 1px solid gray;
+  border: 1px solid whitesmoke;
   background-color: transparent;
+  color: whitesmoke;
   outline: none;
+}
+
+.profile-infos .profile-form input::placeholder,
+.profile-infos .profile-form textarea::placeholder {
+  color: whitesmoke;
 }
 
 .profile-infos .profile-form textarea {
@@ -121,23 +128,23 @@
 
 .profile-infos .status {
   font-style: italic;
-  color: gray;
+  color: whitesmoke;
 }
 
 .profile-infos .edit-btn {
   padding: 0.4rem 0.6rem;
   width: max-content;
-  background-color: #333;
+  background-color: white;
   border: none;
   font-size: 1rem;
   border-radius: 0.3rem;
-  color: white;
+  color: var(--blue);
   font-weight: 500;
   cursor: pointer;
 }
 
 .edit-btn:hover {
-  background-color: #444;
+  background-color: rgb(230, 227, 227);
 }
 
 .profile-actions {
@@ -157,8 +164,8 @@
 }
 
 .profile-actions .cancel-btn {
-  color: #333;
-  background-color: lightgray;
+  color: var(--blue);
+  background-color: whitesmoke;
 }
 
 .profile-actions .save-btn {

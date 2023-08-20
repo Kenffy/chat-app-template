@@ -45,6 +45,10 @@ export const AudioPlayer = ({ audio }) => {
       total: formatDuration(totalTime),
       progress,
     }));
+
+    if (currTime === totalTime) {
+      setPlay(false);
+    }
   };
 
   const handleOnMouseDown = (e) => {
@@ -76,6 +80,9 @@ export const AudioPlayer = ({ audio }) => {
       </span>
       <audio onTimeUpdate={handleTimeUpdate} ref={audioRef} src={audio?.url} />
       <div className="audio-controls">
+        <button onClick={handleTogglePlay}>
+          <i className={play ? "fa-solid fa-pause" : "fa-solid fa-play"}></i>
+        </button>
         <div
           className="audio-timeline"
           ref={timeLineRef}
@@ -86,14 +93,9 @@ export const AudioPlayer = ({ audio }) => {
             style={{ right: `calc(100% - ${duration?.progress} * 100%)` }}
           ></div>
         </div>
-        <div className="controls">
-          <button onClick={handleTogglePlay}>
-            <i className={play ? "fa-solid fa-pause" : "fa-solid fa-play"}></i>
-          </button>
-          <div className="duration-wrapper">
-            <div className="current-time">{duration?.current || "0:00"}</div>-
-            <div className="total-time">{duration?.total || "0:00"}</div>
-          </div>
+        <div className="duration-wrapper">
+          <span className="current-time">{duration?.current || "0:00"}</span>-
+          <span className="total-time">{duration?.total || "0:00"}</span>
         </div>
       </div>
     </div>

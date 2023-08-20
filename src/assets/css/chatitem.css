@@ -7,11 +7,11 @@
 }
 
 .chat-item.active {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .chat-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .chat-item .chat-avatar {
@@ -32,6 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: whitesmoke;
 }
 
 .chat-item .user-infos .username {
@@ -41,11 +42,9 @@
 
 .chat-item .user-infos .timeline {
   font-size: 12px;
-  color: gray;
 }
 
 .chat-item .chat-infos .last-message {
   font-size: 14px;
   padding: 0.4rem 0;
-  color: #444;
 }

@@ -31,7 +31,8 @@
   height: 35px;
   width: 35px;
   border-radius: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--blue);
   opacity: 0.5;
   display: none;
   align-items: center;
@@ -41,7 +42,7 @@
 
 .avatar-infos .back-icon:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .avatar-infos .avatar-wrapper {
@@ -66,7 +67,8 @@
   width: 35px;
   border-radius: 0.5rem;
   position: relative;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--blue);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +76,7 @@
 }
 
 .content-top .menu:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .content-top .menu i,
