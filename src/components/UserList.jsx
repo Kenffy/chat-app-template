@@ -30,7 +30,9 @@ export const UserList = ({
     var toSearch = e.target.value;
     if (toSearch) {
       setFilteredUsers((prev) =>
-        prev?.filter((u) => u.username.toLowerCase().includes(toSearch))
+        prev?.filter((u) =>
+          u.username.toLowerCase().includes(toSearch.toLowerCase())
+        )
       );
     } else {
       setFilteredUsers(users);

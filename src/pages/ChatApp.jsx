@@ -37,7 +37,7 @@ export const ChatApp = () => {
     if (toSearch) {
       setFilteredChats(
         chats?.filter((chat) =>
-          chat.friend.username.toLowerCase().includes(toSearch)
+          chat.friend.username.toLowerCase().includes(toSearch.toLowerCase())
         )
       );
     } else {

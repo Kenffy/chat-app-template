@@ -41,7 +41,6 @@ export const Login = () => {
       const res = await loginAsync(creds);
       if (res?.user) {
         const currUser = await getUserAsync(res.user.uid);
-        console.log(currUser);
         if (currUser) {
           dispatch(signInUser({ user: res.user, currentUser: currUser }));
           clearData();
