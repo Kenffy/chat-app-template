@@ -9,6 +9,7 @@ import {
   getMsgQueryByConversationId,
 } from "../services/services";
 import { onSnapshot } from "@firebase/firestore";
+import ImageSlider from "./ImageSlider";
 
 export const Content = ({
   user,
@@ -21,8 +22,10 @@ export const Content = ({
 }) => {
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
+  const [onViewer, setOnViewer] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [messageImages, setMessageImages] = useState([]);
   const [medias, setMedias] = useState({
     images: [],
     audio: null,
@@ -52,6 +55,11 @@ export const Content = ({
   useEffect(() => {
     return scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleMessageImages = (images) => {
+    setMessageImages(images);
+    setOnViewer(true);
+  };
 
   const handleCreateMessage = async () => {
     if (!chat) return;
@@ -144,16 +152,23 @@ export const Content = ({
           </div>
 
           <div className="content-middle">
-            <div className="messages-wrapper">
-              {messages.map((msg) => (
-                <Message
-                  key={msg?.id}
-                  msg={msg}
-                  scrollRef={scrollRef}
-                  owner={msg?.sender === user?.uid}
-                />
-              ))}
-            </div>
+            {messageImages.length > 0 && onViewer ? (
+              <div className="content-middle-images">
+                <ImageSlider images={messageImages} setOnViewer={setOnViewer} />
+              </div>
+            ) : (
+              <div className="messages-wrapper">
+                {messages.map((msg) => (
+                  <Message
+                    key={msg?.id}
+                    msg={msg}
+                    scrollRef={scrollRef}
+                    owner={msg?.sender === user?.uid}
+                    handleMessageImages={handleMessageImages}
+                  />
+                ))}
+              </div>
+            )}
           </div>
           <div className="content-bottom">
             <ChatInput
