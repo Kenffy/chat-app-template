@@ -1,5 +1,6 @@
 .chat-app {
   width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   position: fixed;
@@ -9,11 +10,177 @@
   bottom: 0;
 }
 
-.app-container {
+.chat-app .container {
   max-width: 1366px;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   position: relative;
-  border: var(--border);
+  border: 2px solid var(--blue);
+}
+
+/* start sidebar */
+
+.chat-app .container .sidebar {
+  width: 350px;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--blue);
+  color: white;
+}
+
+.sidebar .wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebar .wrapper .top {
+  height: 65px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border);
+}
+
+.sidebar .wrapper .top .user-wrapper,
+.sidebar .wrapper .top .add-icon {
+  height: 35px;
+  width: 35px;
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sidebar .wrapper .top .add-icon i {
+  font-size: 1.2rem;
+  transition: all 0.3s;
+}
+
+.sidebar .wrapper .top .add-icon i.active {
+  transform: rotate(135deg);
+}
+
+.sidebar .wrapper .top .user-wrapper {
+  overflow: hidden;
+}
+
+.sidebar .wrapper .top .add-icon {
+  position: relative;
+}
+
+.sidebar .wrapper .top .add-icon:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.sidebar .wrapper .top .user-wrapper img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.sidebar .wrapper .top .heading {
+  font-size: 1.2rem;
+}
+
+.sidebar .wrapper .center {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.sidebar .wrapper .center .search-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+}
+
+.sidebar .wrapper .center .search-wrapper input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: whitesmoke;
+}
+
+.sidebar .wrapper .center .search-wrapper input::placeholder {
+  color: lightgray;
+}
+
+.sidebar .wrapper .center .search-wrapper i {
+  width: 35px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar .wrapper .bottom {
+  height: calc(100vh - 115px);
+  overflow-y: scroll;
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.sidebar .wrapper .bottom .users-wrapper,
+.sidebar .wrapper .bottom .chats-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .wrapper .bottom .users-wrapper .user-item {
+  padding: 1rem 0.8rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  cursor: pointer;
+}
+
+.sidebar .wrapper .bottom .users-wrapper .user-item:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar .wrapper .bottom .users-wrapper .user-avatar {
+  height: 45px;
+  width: 45px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.sidebar .wrapper .bottom .users-wrapper .username {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* end sidebar */
+
+@media (max-width: 820px) {
+  .chat-app .container .sidebar {
+    width: 300px;
+  }
+}
+
+@media (max-width: 580px) {
+  .chat-app {
+    position: initial;
+  }
+  .chat-app .container .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
 }

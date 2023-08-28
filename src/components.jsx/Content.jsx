@@ -1,36 +1,66 @@
-import { useState } from "react";
-import "../assets/css/content.css";
-import NoAvatar from "../assets/images/avatar.png";
+import React, { useEffect, useRef, useState } from "react";
+import ImageSlider from "./ImageSlider";
 import { Message } from "./Message";
 import { ChatInput } from "./ChatInput";
+import "../assets/css/content.css";
+import NoAvatar from "../assets/images/avatar.png";
+import { SeedMessages } from "../data/Messages";
 
-export const Content = ({ chat, setChat }) => {
+export default function Content({ chat, setChat }) {
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
+  const [onViewer, setOnViewer] = useState(false);
+  const [images, setImages] = useState([]);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState(SeedMessages);
   const [medias, setMedias] = useState({
     images: [],
     audio: null,
-    document: null,
   });
 
-  const handleClick = () => {
-    setChat(false);
-    console.log(message, medias);
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    return scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleImages = (images) => {
+    setImages(images);
+    setOnViewer(true);
   };
 
+  const handleCreateMessage = () => {
+    if (!chat) return;
+    if (!message && !medias?.audio && medias?.images.length === 0) return;
+
+    const msg = {
+      conversationId: "chatId",
+      sender: "senderId",
+      receiver: "receiverId",
+      message,
+      viewed: false,
+      images: [],
+      audio: null,
+    };
+    console.log("message added", msg, medias);
+  };
   return (
     <div className={chat ? "content active" : "content"}>
       {chat ? (
         <div className="content-wrapper">
           <div className="content-top">
             <div className="avatar-infos">
-              <div onClick={handleClick} className="back-icon">
+              <div
+                onClick={() => {
+                  setChat(false);
+                }}
+                className="back-icon"
+              >
                 <i className="fa-solid fa-chevron-left"></i>
               </div>
               <div className="avatar-wrapper">
                 <img src={NoAvatar} alt="" className="avatar" />
-                <span className="username">Max Well</span>
+                <span className="username">{"Marc"}</span>
               </div>
             </div>
 
@@ -54,26 +84,23 @@ export const Content = ({ chat, setChat }) => {
           </div>
 
           <div className="content-middle">
-            <div className="messages-wrapper">
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-              <Message />
-              <Message owner={true} />
-              <Message />
-              <Message />
-            </div>
+            {images.length > 0 && onViewer ? (
+              <div className="content-middle-images">
+                <ImageSlider images={images} setOnViewer={setOnViewer} />
+              </div>
+            ) : (
+              <div className="messages-wrapper">
+                {messages.map((msg) => (
+                  <Message
+                    key={msg?.id}
+                    msg={msg}
+                    scrollRef={scrollRef}
+                    owner={msg?.owner}
+                    handleImages={handleImages}
+                  />
+                ))}
+              </div>
+            )}
           </div>
           <div className="content-bottom">
             <ChatInput
@@ -83,6 +110,7 @@ export const Content = ({ chat, setChat }) => {
               setMedias={setMedias}
               message={message}
               setMessage={setMessage}
+              handleCreate={handleCreateMessage}
             />
           </div>
         </div>
@@ -97,4 +125,4 @@ export const Content = ({ chat, setChat }) => {
       )}
     </div>
   );
-};
+}

@@ -1,5 +1,4 @@
 import "../assets/css/chatinput.css";
-import { v4 as getID } from "uuid";
 
 export const ChatInput = ({
   onMedia,
@@ -8,6 +7,7 @@ export const ChatInput = ({
   setMessage,
   setOnMedia,
   setMedias,
+  handleCreate,
 }) => {
   const handleImages = (e) => {
     const files = e.target.files;
@@ -15,7 +15,7 @@ export const ChatInput = ({
     const maxUpload = 4;
     for (let i = 0; i < files.length; i++) {
       if (count < maxUpload) {
-        const id = getID();
+        const id = new Date().getTime();
         const newImage = {
           id: id,
           filename: id + "-" + files[i].name,
@@ -34,26 +34,13 @@ export const ChatInput = ({
     if (e.target.files) {
       const file = e.target.files[0];
       const newAudio = {
-        filename: getID() + "-" + file.name,
+        filename: new Date().getTime() + "-" + file.name,
         file: file,
         type: "audio",
       };
       setMedias((prev) => ({ ...prev, audio: newAudio }));
     }
 
-    setOnMedia(false);
-  };
-
-  const handleDocs = (e) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      const newDocument = {
-        filename: getID() + "-" + file.name,
-        file: file,
-        type: "document",
-      };
-      setMedias((prev) => ({ ...prev, document: newDocument }));
-    }
     setOnMedia(false);
   };
 
@@ -74,12 +61,6 @@ export const ChatInput = ({
     }));
   };
 
-  const handleRemoveDoc = () => {
-    setMedias((prev) => ({
-      ...prev,
-      document: null,
-    }));
-  };
   return (
     <div className="chat-input">
       {(medias?.images?.length > 0 || medias?.audio || medias?.document) && (
@@ -102,15 +83,6 @@ export const ChatInput = ({
             <div className="file-wrapper">
               <span className="file-name">{medias.audio?.file.name}</span>
               <span onClick={handleRemoveAudio}>
-                <i className="fa-solid fa-rectangle-xmark"></i>
-              </span>
-            </div>
-          )}
-
-          {medias?.document && (
-            <div className="file-wrapper">
-              <span className="file-name">{medias.document?.file.name}</span>
-              <span onClick={handleRemoveDoc}>
                 <i className="fa-solid fa-rectangle-xmark"></i>
               </span>
             </div>
@@ -149,16 +121,6 @@ export const ChatInput = ({
               />
               <i className="fa-solid fa-headphones"></i>Audio
             </label>
-            <label className="media-item" htmlFor="upload-documents">
-              <input
-                style={{ display: "none" }}
-                accept=".txt,.pdf"
-                id="upload-documents"
-                type="file"
-                onChange={handleDocs}
-              />
-              <i className="fa-solid fa-file"></i>Document
-            </label>
           </div>
         )}
       </>
@@ -167,7 +129,7 @@ export const ChatInput = ({
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Write a message"
       ></textarea>
-      <div className="input-icon">
+      <div className="input-icon" onClick={handleCreate}>
         <i className="fa-solid fa-paper-plane"></i>
       </div>
     </div>

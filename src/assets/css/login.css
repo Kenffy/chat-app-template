@@ -1,0 +1,82 @@
+.login {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login .wrapper {
+  width: 450px;
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--blue);
+  color: var(--white);
+  border-radius: 0.5rem;
+}
+
+.login .wrapper .heading {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.login .wrapper .form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.login .wrapper .form .error-msg {
+  color: orangered;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.login .wrapper .form input {
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.3rem;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.login .wrapper .form input::placeholder {
+  color: whitesmoke;
+}
+
+.login .wrapper .form button {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: var(--white);
+  color: var(--blue);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.login .wrapper .form button:hover {
+  opacity: 1;
+}
+
+.login .wrapper .form .link {
+  margin-top: 1rem;
+  text-align: right;
+  font-size: 13px;
+}
+
+.login .wrapper .form .link:hover a {
+  text-decoration: underline;
+  transition: text-decoration 0.1s ease-in-out;
+}
+
+@media (max-width: 580px) {
+  .login .wrapper {
+    width: 90%;
+  }
+}

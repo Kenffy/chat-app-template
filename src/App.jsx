@@ -1,15 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import "./assets/css/app.css";
-//import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import { useState } from "react";
-//import { Messenger } from "./pages/Messenger";
-import { ChatApp } from "./pages/ChatApp";
+import ChatApp from "./pages/ChatApp";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-function App() {
-  const [user, setUser] = useState(true);
-
+export default function App() {
+  const user = true;
   return (
     <BrowserRouter>
       <Routes>
@@ -21,5 +16,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;
