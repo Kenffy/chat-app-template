@@ -5,7 +5,7 @@ import ChatItem from "../components.jsx/ChatItem";
 import { useState } from "react";
 import { Profile } from "../components.jsx/Profile";
 
-export default function ChatApp() {
+export default function ChatApp({ setUser }) {
   const [newChat, setNewChat] = useState(false);
   const [chat, setChat] = useState(false);
   const [onProfile, setOnProfile] = useState(false);
@@ -14,7 +14,7 @@ export default function ChatApp() {
     <div className="chat-app">
       <div className="container">
         <div className="sidebar">
-          <Profile open={onProfile} setOpen={setOnProfile} />
+          <Profile setUser={setUser} open={onProfile} setOpen={setOnProfile} />
           <div className="wrapper">
             <div className="top">
               <div className="user-wrapper" onClick={() => setOnProfile(true)}>

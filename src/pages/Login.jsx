@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "../assets/css/login.css";
 
-export default function Login() {
+export default function Login({ setUser }) {
   //const { dispatch } = useContext(Context);
 
   const emailRef = useRef();
@@ -21,6 +21,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUser(true);
     // if (!emailRef?.current || !passwordRef?.current) {
     //   setError("Please provide your username and password.");
     //   return;

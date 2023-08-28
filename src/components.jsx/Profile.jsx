@@ -10,7 +10,7 @@ import NoAvatar from "../assets/images/avatar.png";
 //   UPDATE_PROFILE_START,
 // } from "../context/Constants";
 
-export const Profile = ({ open, setOpen }) => {
+export const Profile = ({ open, setOpen, setUser }) => {
   // const { currentUser, user, dispatch, loading } = useContext(Context);
   const [onEdit, setOnEdit] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -144,7 +144,7 @@ export const Profile = ({ open, setOpen }) => {
             <button onClick={() => setOnEdit(true)} className="edit-btn">
               <i className="fa-solid fa-pen-to-square"></i>Profile
             </button>
-            <button className="logout-btn">
+            <button className="logout-btn" onClick={() => setUser(false)}>
               <i className="fa-solid fa-power-off"></i>Logout
             </button>
           </div>
