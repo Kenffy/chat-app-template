@@ -1,4 +1,5 @@
 import "../assets/css/chatinput.css";
+import { v4 as getID } from "uuid";
 
 export const ChatInput = ({
   onMedia,
@@ -15,9 +16,10 @@ export const ChatInput = ({
     const maxUpload = 4;
     for (let i = 0; i < files.length; i++) {
       if (count < maxUpload) {
-        const id = new Date().getTime();
+        const id = getID();
         const newImage = {
           id: id,
+          origin: files[i].name,
           filename: id + "-" + files[i].name,
           file: files[i],
         };
@@ -34,7 +36,8 @@ export const ChatInput = ({
     if (e.target.files) {
       const file = e.target.files[0];
       const newAudio = {
-        filename: new Date().getTime() + "-" + file.name,
+        origin: file.name,
+        filename: getID() + "-" + file.name,
         file: file,
         type: "audio",
       };
@@ -63,7 +66,7 @@ export const ChatInput = ({
 
   return (
     <div className="chat-input">
-      {(medias?.images?.length > 0 || medias?.audio || medias?.document) && (
+      {(medias?.images?.length > 0 || medias?.audio) && (
         <div className="media-preview">
           {medias?.images.length > 0 && (
             <div className="image-preview">
@@ -81,6 +84,9 @@ export const ChatInput = ({
 
           {medias?.audio && (
             <div className="file-wrapper">
+              <span>
+                <i className="fa-solid fa-headphones"></i>
+              </span>
               <span className="file-name">{medias.audio?.file.name}</span>
               <span onClick={handleRemoveAudio}>
                 <i className="fa-solid fa-rectangle-xmark"></i>

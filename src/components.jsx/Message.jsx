@@ -1,4 +1,5 @@
 import "../assets/css/message.css";
+import { format } from "timeago.js";
 
 export const Message = ({ owner, scrollRef, msg, handleImages }) => {
   return (
@@ -9,18 +10,23 @@ export const Message = ({ owner, scrollRef, msg, handleImages }) => {
             className="image-wrapper"
             onClick={() => handleImages(msg.images)}
           >
-            <img src={msg.images[0]} alt="" />
+            <img src={msg.images[0].url} alt="" />
             {msg?.images.length > 1 && (
               <div className="image-count">+{msg?.images.length - 1}</div>
             )}
           </div>
         )}
         {msg?.audio !== null && (
-          <audio className="audio-player" src={msg?.audio} controls />
+          <audio
+            className="audio-player"
+            src={msg?.audio?.url}
+            controls
+            controlsList="nodownload"
+          />
         )}
         <p>{msg?.message}</p>
       </div>
-      <span ref={scrollRef}>just now</span>
+      <span ref={scrollRef}>{format(msg?.createdAt?.toDate())}</span>
     </div>
   );
 };

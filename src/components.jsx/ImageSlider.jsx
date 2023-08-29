@@ -23,7 +23,7 @@ export default function ImageSlider({ images, setOnViewer }) {
         >
           {images.map((image, index) => (
             <SwiperSlide key={index}>
-              <img src={image} className="image-slide" alt="chat images" />
+              <img src={image?.url} className="image-slide" alt="chat images" />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -1,8 +1,11 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import "../assets/css/login.css";
+import { Context } from "../context/Context";
+import { loginAsync } from "../services/authServices";
+import { getUserAsync } from "../services/chatServices";
 
 export default function Login({ setUser }) {
-  //const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(Context);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -21,34 +24,34 @@ export default function Login({ setUser }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUser(true);
-    // if (!emailRef?.current || !passwordRef?.current) {
-    //   setError("Please provide your username and password.");
-    //   return;
-    // }
 
-    // setLoading(true);
+    if (!emailRef?.current || !passwordRef?.current) {
+      setError("Please provide your username and password.");
+      return;
+    }
 
-    // const creds = {
-    //   email: emailRef.current.value,
-    //   password: passwordRef.current.value,
-    // };
+    setLoading(true);
 
-    // try {
-    //   const res = await loginAsync(creds);
-    //   if (res?.user) {
-    //     const currUser = await getUserAsync(res.user.uid);
-    //     if (currUser) {
-    //       dispatch(signInUser({ user: res.user, currentUser: currUser }));
-    //       clearData();
-    //       setLoading(false);
-    //     }
-    //   }
-    // } catch (err) {
-    //   var message = err.code;
-    //   setError(message);
-    //   setLoading(false);
-    // }
+    const creds = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    try {
+      const res = await loginAsync(creds);
+      if (res?.user) {
+        const currUser = await getUserAsync(res.user.uid);
+        if (currUser) {
+          dispatch(signInUser({ user: res.user, currentUser: currUser }));
+          clearData();
+          setLoading(false);
+        }
+      }
+    } catch (err) {
+      var message = err.code;
+      setError(message);
+      setLoading(false);
+    }
   };
 
   return (

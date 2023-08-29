@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import "../assets/css/register.css";
+import { registerAsync } from "../services/authServices";
 
 export default function Register() {
   const nameRef = useRef();
@@ -23,29 +24,29 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!nameRef?.current || !emailRef?.current || !passwordRef?.current) {
-    //   setError("Please provide your username and password.");
-    //   return;
-    // }
+    if (!nameRef?.current || !emailRef?.current || !passwordRef?.current) {
+      setError("Please provide your username and password.");
+      return;
+    }
 
-    // setLoading(true);
+    setLoading(true);
 
-    // const creds = {
-    //   username: nameRef.current.value,
-    //   email: emailRef.current.value,
-    //   password: passwordRef.current.value,
-    // };
+    const creds = {
+      username: nameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
 
-    // try {
-    //   await registerAsync(creds);
-    //   clearData();
-    //   setLoading(false);
-    //   navigate("/login");
-    // } catch (err) {
-    //   var message = err.code;
-    //   setError(message);
-    //   setLoading(false);
-    // }
+    try {
+      await registerAsync(creds);
+      clearData();
+      setLoading(false);
+      navigate("/login");
+    } catch (err) {
+      var message = err.code;
+      setError(message);
+      setLoading(false);
+    }
   };
 
   return (
