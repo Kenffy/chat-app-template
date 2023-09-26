@@ -143,11 +143,11 @@ export default function Content({
               </div>
             ) : (
               <div className="messages-wrapper">
-                {messages.map((msg) => (
+                {messages.map((msg, index) => (
                   <Message
                     key={msg?.id}
                     msg={msg}
-                    scrollRef={scrollRef}
+                    scrollRef={messages.length - 1 == index ? scrollRef : null}
                     owner={msg?.sender === user?.id}
                     handleImages={handleImages}
                   />
