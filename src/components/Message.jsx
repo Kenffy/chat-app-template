@@ -4,7 +4,7 @@ import { AudioPlayer } from "./AudioPlayer";
 
 export const Message = ({ owner, scrollRef, msg, handleMessageImages }) => {
   return (
-    <div className={owner ? "message owner" : "message"}>
+    <div ref={scrollRef} className={owner ? "message owner" : "message"}>
       <div className="message-wrapper">
         {msg?.images.length > 0 && (
           <div
@@ -20,7 +20,7 @@ export const Message = ({ owner, scrollRef, msg, handleMessageImages }) => {
         {msg?.audio && <AudioPlayer audio={msg?.audio} />}
         <p>{msg?.message}</p>
       </div>
-      <span ref={scrollRef}>{format(msg?.createdAt)}</span>
+      <span>{format(msg?.createdAt?.toDate())}</span>
     </div>
   );
 };

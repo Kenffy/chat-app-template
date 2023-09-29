@@ -65,3 +65,21 @@
   padding: 0;
   color: white;
 }
+
+.audio-controls .progress-wrapper {
+  position: relative;
+  height: 6px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+}
+
+.audio-controls .progress-wrapper .progress-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}

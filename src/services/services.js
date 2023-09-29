@@ -22,41 +22,6 @@ import {
 } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 
-const uploadImages = async (images, location) => {
-  let imagesUrls = [];
-  for (const image of images) {
-    const storageRef = ref(storage, `${location}${image.filename}`);
-    const uploadTask = await uploadBytes(storageRef, image.file);
-    const downloadURL = await getDownloadURL(uploadTask.ref);
-    imagesUrls.push({ filename: image.filename, url: downloadURL });
-  }
-  return imagesUrls;
-};
-
-export const dataFromSnapshot = (snapshot) => {
-  if (!snapshot.exists) return undefined;
-  const data = snapshot.data();
-  for (const prop in data) {
-    if (data.hasOwnProperty(prop)) {
-      if (data[prop] instanceof Timestamp) {
-        data[prop] = data[prop].toDate();
-      }
-    }
-  }
-  return { ...data, id: snapshot.id };
-};
-
-export const performDataTimetamp = (data) => {
-  for (const prop in data) {
-    if (data.hasOwnProperty(prop)) {
-      if (data[prop] instanceof Timestamp) {
-        data[prop] = data[prop].toDate();
-      }
-    }
-  }
-  return data;
-};
-
 // users
 export const createUserAsync = async (creds) => {
   try {
@@ -261,9 +226,9 @@ export const getUserConversationsAsync = async (user) => {
         const friendId = conv.members.find((u) => u !== user.uid);
         const res = await getDoc(doc(db, "users", friendId));
         const usr = res.data();
-        if (conv?.message) {
-          conv.message = performDataTimetamp(conv.message);
-        }
+        // if (conv?.message) {
+        //   conv.message = performDataTimetamp(conv.message);
+        // }
         conversations.push({
           ...conv,
           friend: {
@@ -355,4 +320,21 @@ export const getMsgQueryByConversationId = (convId) => {
     where("conversationId", "==", convId),
     orderBy("createdAt", "asc")
   );
+};
+
+const uploadImages = async (images, location) => {
+  let imagesUrls = [];
+  for (const image of images) {
+    const storageRef = ref(storage, `${location}${image.filename}`);
+    const uploadTask = await uploadBytes(storageRef, image.file);
+    const downloadURL = await getDownloadURL(uploadTask.ref);
+    imagesUrls.push({ filename: image.filename, url: downloadURL });
+  }
+  return imagesUrls;
+};
+
+export const dataFromSnapshot = (snapshot) => {
+  if (!snapshot.exists) return undefined;
+  const data = snapshot.data();
+  return { ...data, id: snapshot.id };
 };

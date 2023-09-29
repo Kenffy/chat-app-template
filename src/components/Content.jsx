@@ -87,7 +87,6 @@ export const Content = ({
         document: null,
       }));
       if (res) {
-        setMessages((prev) => [...prev, res]);
         const currChat = {
           ...chat,
           last: { message: res.message, createdAt: res.createdAt },
@@ -158,11 +157,11 @@ export const Content = ({
               </div>
             ) : (
               <div className="messages-wrapper">
-                {messages.map((msg) => (
+                {messages.map((msg, index) => (
                   <Message
                     key={msg?.id}
                     msg={msg}
-                    scrollRef={scrollRef}
+                    scrollRef={messages.length - 1 == index ? scrollRef : null}
                     owner={msg?.sender === user?.uid}
                     handleMessageImages={handleMessageImages}
                   />

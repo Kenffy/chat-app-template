@@ -3,6 +3,18 @@ import { format } from "timeago.js";
 import NoAvatar from "../assets/images/avatar.png";
 
 export const ChatItem = ({ setChat, chat, currentChat }) => {
+  let lastMessage = `You: Say hi! to ${chat?.friend?.username}`;
+  if (chat?.last?.message) {
+    const lastMessage = chat.last.message;
+    // if (tmpLastMessage) {
+    //   lastMessage = chat.messages[chat.messages.length - 1]?.message;
+    // } else if (tmpLastMessage.images.length > 0) {
+    //   lastMessage = "📷 Image message";
+    // } else if (lastMessage.audio) {
+    //   lastMessage = "🎧 Audio Message";
+    // }
+  }
+
   return (
     <div
       className={
@@ -20,15 +32,11 @@ export const ChatItem = ({ setChat, chat, currentChat }) => {
           <span className="username">{chat?.friend?.username}</span>
           {chat?.last?.createdAt && (
             <span className="timeline">
-              {format(chat.last.createdAt.toDate())}
+              {format(chat.last?.createdAt?.toDate())}
             </span>
           )}
         </div>
-        <p className="last-message">
-          {chat?.last?.message
-            ? chat.last.message
-            : `You: Say hi! to ${chat.friend.username}`}
-        </p>
+        <p className="last-message">{lastMessage}</p>
       </div>
     </div>
   );

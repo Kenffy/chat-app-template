@@ -4,12 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 export const AudioPlayer = ({ audio }) => {
   const [play, setPlay] = useState(false);
   const [duration, setDuration] = useState({
+    currentTime: 0,
+    totalTime: 0,
     current: "0:00",
     total: "0:00",
     progress: 0,
   });
   const audioRef = useRef();
   const timeLineRef = useRef();
+  const testRef = useRef();
 
   const formatter = new Intl.NumberFormat(undefined, {
     minimumIntegerDigits: 2,
@@ -41,6 +44,8 @@ export const AudioPlayer = ({ audio }) => {
     const progress = currTime / totalTime;
     setDuration((prev) => ({
       ...prev,
+      currentTime: currTime,
+      totalTime: totalTime,
       current: formatDuration(currTime),
       total: formatDuration(totalTime),
       progress,
@@ -67,10 +72,27 @@ export const AudioPlayer = ({ audio }) => {
       const progress = currentTime / audioRef.current.duration;
       setDuration((prev) => ({
         ...prev,
+        currentTime,
         current: formatDuration(currentTime),
         progress,
       }));
     }
+  };
+
+  const handleOnTimeline = (e) => {
+    if (!testRef?.current) return;
+    const clientRect = testRef.current.getBoundingClientRect();
+    const percent = (e.clientX - clientRect.x) / clientRect.width;
+    const currentTime = percent * audioRef.current.duration;
+    const progress = currentTime / audioRef.current.duration;
+
+    audioRef.current.currentTime = currentTime;
+    setDuration((prev) => ({
+      ...prev,
+      currentTime,
+      current: formatDuration(currentTime),
+      progress,
+    }));
   };
 
   return (
@@ -84,6 +106,16 @@ export const AudioPlayer = ({ audio }) => {
           <i className={play ? "fa-solid fa-pause" : "fa-solid fa-play"}></i>
         </button>
         <div
+          className="progress-wrapper"
+          ref={testRef}
+          onMouseDown={handleOnTimeline}
+        >
+          <div
+            className="progress-line"
+            style={{ width: `calc(${duration?.progress} * 100%)` }}
+          ></div>
+        </div>
+        {/* <div
           className="audio-timeline"
           ref={timeLineRef}
           onMouseDown={handleOnMouseDown}
@@ -92,7 +124,7 @@ export const AudioPlayer = ({ audio }) => {
             className="progress-bar"
             style={{ right: `calc(100% - ${duration?.progress} * 100%)` }}
           ></div>
-        </div>
+        </div> */}
         <div className="duration-wrapper">
           <span className="current-time">{duration?.current || "0:00"}</span>-
           <span className="total-time">{duration?.total || "0:00"}</span>
