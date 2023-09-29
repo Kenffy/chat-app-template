@@ -99,7 +99,7 @@
 }
 
 .chat-input .input-icon.active i {
-  transform: rotate(45deg);
+  transform: rotate(135deg);
 }
 
 .chat-input .media-input-wrapper {
