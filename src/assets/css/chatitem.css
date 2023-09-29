@@ -47,9 +47,9 @@
 .chat-item .chat-infos .last-message {
   font-size: 14px;
   padding: 0.4rem 0;
-  --max-lines: 1;
+  /* --max-lines: 1;
   display: --webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--max-lines);
+  -webkit-line-clamp: var(--max-lines); */
 }

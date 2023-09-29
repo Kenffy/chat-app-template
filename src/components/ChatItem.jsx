@@ -5,7 +5,10 @@ import NoAvatar from "../assets/images/avatar.png";
 export const ChatItem = ({ setChat, chat, currentChat }) => {
   let lastMessage = `You: Say hi! to ${chat?.friend?.username}`;
   if (chat?.last?.message) {
-    const lastMessage = chat.last.message;
+    lastMessage =
+      chat.last.message.length > 25
+        ? chat.last.message.slice(0, 25) + "..."
+        : chat.last.message;
     // if (tmpLastMessage) {
     //   lastMessage = chat.messages[chat.messages.length - 1]?.message;
     // } else if (tmpLastMessage.images.length > 0) {
