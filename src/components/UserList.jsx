@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
 import "../assets/css/userlist.css";
-import NoAvatar from "../assets/images/avatar.png";
-import { createConversationAsync, getUsersAsync } from "../services/services";
-import { Context } from "../context/Context";
+import { createConversationAsync } from "../services/services";
+import { useContacts } from "../context/ContactProvider";
+import Avatar from "./Avatar";
 
 export const UserList = ({
   open,
@@ -12,31 +11,12 @@ export const UserList = ({
   setFilteredChats,
   handleCurrentChat,
 }) => {
-  const { user } = useContext(Context);
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState(users);
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      const res = await getUsersAsync(user);
-      setUsers(res);
-      setFilteredUsers(res);
-    };
-    loadUsers();
-  }, [user]);
+  const { user, contacts, searchContacts } = useContacts();
 
   const handleSearchUsers = async (e) => {
     e.preventDefault();
     var toSearch = e.target.value;
-    if (toSearch) {
-      setFilteredUsers((prev) =>
-        prev?.filter((u) =>
-          u.username.toLowerCase().includes(toSearch.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredUsers(users);
-    }
+    searchContacts(toSearch);
   };
 
   const handleCreateConversation = async (friend) => {
@@ -77,18 +57,18 @@ export const UserList = ({
 
         <div className="users-wrapper">
           <div className="users">
-            {filteredUsers.map((usr) => (
+            {contacts.map((usr) => (
               <div
                 key={usr?.id}
                 className="user-item"
                 onClick={() => handleCreateConversation(usr)}
               >
-                <img
-                  src={usr?.profile ? usr.profile.url : NoAvatar}
-                  alt=""
-                  className="user-avatar"
+                <Avatar
+                  src={usr?.profile ? usr.profile.url : ""}
+                  height={45}
+                  width={45}
+                  username={usr?.username}
                 />
-                <span className="username">{usr?.username}</span>
               </div>
             ))}
           </div>

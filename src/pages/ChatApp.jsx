@@ -1,12 +1,12 @@
 import "../assets/css/chatapp.css";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Content } from "../components/Content";
-import { Sidebar } from "../components/SideBar";
-import { Context } from "../context/Context";
 import { getUserConversationsAsync } from "../services/services";
+import { Sidebar } from "../components/Sidebar";
+import { useContacts } from "../context/ContactProvider";
 
 export const ChatApp = () => {
-  const { user, currentUser } = useContext(Context);
+  const { user, currentUser } = useContacts();
   const [chats, setChats] = useState([]);
   const [onChat, setOnChat] = useState(false);
   const [filteredChats, setFilteredChats] = useState([]);

@@ -1,10 +1,19 @@
 import { format } from "timeago.js";
 import "../assets/css/message.css";
 import { AudioPlayer } from "./AudioPlayer";
+import { useEffect, useRef } from "react";
 
-export const Message = ({ owner, scrollRef, msg, handleMessageImages }) => {
+export const Message = ({ owner, isLastMessage, msg, handleMessageImages }) => {
+  const scrollRef = useRef();
+  useEffect(() => {
+    return scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [msg]);
+
   return (
-    <div ref={scrollRef} className={owner ? "message owner" : "message"}>
+    <div
+      ref={isLastMessage ? scrollRef : null}
+      className={owner ? "message owner" : "message"}
+    >
       <div className="message-wrapper">
         {msg?.images.length > 0 && (
           <div

@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import "../assets/css/sidebar.css";
 import NoAvatar from "../assets/images/avatar.png";
 import { ChatItem } from "./ChatItem";
 import { Profile } from "./Profile";
 import { UserList } from "./UserList";
-import { Context } from "../context/Context";
-import { signOutUser } from "../context/Actions";
+import { useContacts } from "../context/ContactProvider";
 
 export const Sidebar = ({
   chats,
@@ -16,7 +15,7 @@ export const Sidebar = ({
   setFilteredChats,
   handleCurrentChat,
 }) => {
-  const { dispatch, currentUser } = useContext(Context);
+  const { logout, currentUser } = useContacts();
   const [onMenu, setOnMenu] = useState(false);
   const [onProfile, setOnProfile] = useState(false);
   const [onNewChat, setOnNewChat] = useState(false);
@@ -61,10 +60,7 @@ export const Sidebar = ({
                   <i className="fa-solid fa-circle-half-stroke"></i>
                   Dark Mode
                 </span>
-                <span
-                  className="menu-item"
-                  onClick={() => dispatch(signOutUser())}
-                >
+                <span className="menu-item" onClick={logout}>
                   <i className="fa-solid fa-right-from-bracket"></i>
                   Logout
                 </span>

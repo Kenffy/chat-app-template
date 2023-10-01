@@ -1,6 +1,6 @@
 import "../assets/css/chatitem.css";
 import { format } from "timeago.js";
-import NoAvatar from "../assets/images/avatar.png";
+import Avatar from "./Avatar";
 
 export const ChatItem = ({ setChat, chat, currentChat }) => {
   let lastMessage = `You: Say hi! to ${chat?.friend?.username}`;
@@ -25,8 +25,10 @@ export const ChatItem = ({ setChat, chat, currentChat }) => {
       }
       onClick={() => setChat(true)}
     >
-      <img
-        src={chat?.friend?.profile ? chat?.friend.profile.url : NoAvatar}
+      <Avatar
+        height={45}
+        width={45}
+        src={chat?.friend?.profile ? chat?.friend.profile.url : ""}
         alt=""
         className="chat-avatar"
       />

@@ -32,8 +32,6 @@ export const Content = ({
     document: null,
   });
 
-  const scrollRef = useRef();
-
   useEffect(() => {
     const loadMessages = async () => {
       try {
@@ -51,10 +49,6 @@ export const Content = ({
     };
     chat && loadMessages();
   }, [chat]);
-
-  useEffect(() => {
-    return scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const handleMessageImages = (images) => {
     setMessageImages(images);
@@ -161,7 +155,7 @@ export const Content = ({
                   <Message
                     key={msg?.id}
                     msg={msg}
-                    scrollRef={messages.length - 1 == index ? scrollRef : null}
+                    isLastMessage={messages.length - 1 == index}
                     owner={msg?.sender === user?.uid}
                     handleMessageImages={handleMessageImages}
                   />

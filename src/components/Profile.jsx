@@ -1,17 +1,11 @@
-import { useContext, useRef, useState } from "react";
+import { useState } from "react";
 import "../assets/css/profile.css";
-import NoAvatar from "../assets/images/avatar.png";
-import { Context } from "../context/Context";
 import { v4 as getID } from "uuid";
-import { updateUserAsync } from "../services/services";
-import { updateProfile } from "../context/Actions";
-import {
-  UPDATE_PROFILE_FAILED,
-  UPDATE_PROFILE_START,
-} from "../context/Constants";
+import { useContacts } from "../context/ContactProvider";
+import Avatar from "./Avatar";
 
 export const Profile = ({ open, setOpen }) => {
-  const { currentUser, user, dispatch, loading } = useContext(Context);
+  const { currentUser, updateUser, loading } = useContacts();
   const [onEdit, setOnEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
@@ -36,7 +30,6 @@ export const Profile = ({ open, setOpen }) => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    console.log("cancel");
     setOnEdit(false);
   };
 
@@ -44,25 +37,16 @@ export const Profile = ({ open, setOpen }) => {
     e.preventDefault();
     if (!username) return;
 
-    try {
-      dispatch({ type: UPDATE_PROFILE_START });
-      const user = {
-        username,
-        status: status ? status : "Hello from my country 😀",
-      };
+    const user = {
+      username,
+      status: status ? status : "Hello from my country 😀",
+    };
 
-      const data = {
-        profile: profileImage,
-      };
-      const res = await updateUserAsync(user, data);
-      if (res) {
-        dispatch(updateProfile(res));
-      }
-      setOnEdit(false);
-    } catch (error) {
-      console.log(error);
-      dispatch({ type: UPDATE_PROFILE_FAILED });
-    }
+    const data = {
+      profile: profileImage,
+    };
+    updateUser(user, data);
+    setOnEdit(false);
   };
 
   return (
@@ -81,16 +65,18 @@ export const Profile = ({ open, setOpen }) => {
           <div className="profile-infos">
             <div className="avatar-wrapper">
               {profileImage ? (
-                <img
+                <Avatar
+                  height={150}
+                  width={150}
                   src={URL.createObjectURL(profileImage?.file)}
                   alt=""
                   className="avatar"
                 />
               ) : (
-                <img
-                  src={
-                    currentUser?.profile ? currentUser.profile.url : NoAvatar
-                  }
+                <Avatar
+                  height={150}
+                  width={150}
+                  src={currentUser?.profile ? currentUser.profile.url : ""}
                   alt=""
                   className="avatar"
                 />
@@ -135,8 +121,10 @@ export const Profile = ({ open, setOpen }) => {
         ) : (
           <div className="profile-infos">
             <div className="avatar-wrapper">
-              <img
-                src={currentUser?.profile ? currentUser.profile.url : NoAvatar}
+              <Avatar
+                height={150}
+                width={150}
+                src={currentUser?.profile ? currentUser.profile.url : ""}
                 alt=""
                 className="avatar"
               />

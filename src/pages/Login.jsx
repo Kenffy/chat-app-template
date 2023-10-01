@@ -1,12 +1,11 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import styles from "../assets/css/login.module.css";
 import { loginAsync } from "../services/authServices";
 import { getUserAsync } from "../services/services";
-import { signInUser } from "../context/Actions";
-import { Context } from "../context/Context";
+import { useContacts } from "../context/ContactProvider";
 
 export const Login = () => {
-  const { dispatch } = useContext(Context);
+  const { setUser, setCurrentUser } = useContacts();
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -42,7 +41,13 @@ export const Login = () => {
       if (res?.user) {
         const currUser = await getUserAsync(res.user.uid);
         if (currUser) {
-          dispatch(signInUser({ user: res.user, currentUser: currUser }));
+          setUser({
+            uid: res.user.uid,
+            username: res.user.displayName,
+            profile: res.user.photoURL,
+            email: res.user.email,
+          });
+          currUser && setCurrentUser(currUser);
           clearData();
           setLoading(false);
         }

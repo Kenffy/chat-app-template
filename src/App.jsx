@@ -2,13 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./assets/css/app.css";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
-import { useContext } from "react";
-
 import { ChatApp } from "./pages/ChatApp";
-import { Context } from "./context/Context";
+import { useContacts } from "./context/ContactProvider";
 
 function App() {
-  const { user } = useContext(Context);
+  const { user } = useContacts();
 
   return (
     <BrowserRouter>
