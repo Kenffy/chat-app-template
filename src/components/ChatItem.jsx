@@ -2,7 +2,7 @@ import "../assets/css/chatitem.css";
 import { format } from "timeago.js";
 import Avatar from "./Avatar";
 
-export const ChatItem = ({ setChat, chat, currentChat }) => {
+export const ChatItem = ({ setChat, chat, isActive }) => {
   let lastMessage = `You: Say hi! to ${chat?.friend?.username}`;
   if (chat?.last?.message) {
     lastMessage =
@@ -20,15 +20,13 @@ export const ChatItem = ({ setChat, chat, currentChat }) => {
 
   return (
     <div
-      className={
-        chat?.id === currentChat?.id ? "chat-item active" : "chat-item"
-      }
+      className={isActive ? "chat-item active" : "chat-item"}
       onClick={() => setChat(true)}
     >
       <Avatar
         height={45}
         width={45}
-        src={chat?.friend?.profile ? chat?.friend.profile.url : ""}
+        src={chat?.friend?.profile ? chat.friend.profile : ""}
         alt=""
         className="chat-avatar"
       />

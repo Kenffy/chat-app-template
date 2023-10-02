@@ -1,30 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "../assets/css/content.css";
-import NoAvatar from "../assets/images/avatar.png";
 import { Message } from "./Message";
 import { ChatInput } from "./ChatInput";
-import {
-  createMessageAsync,
-  dataFromSnapshot,
-  getMsgQueryByConversationId,
-} from "../services/services";
-import { onSnapshot } from "@firebase/firestore";
 import ImageSlider from "./ImageSlider";
+import { useConversations } from "../context/ConversationProvider";
+import Avatar from "./Avatar";
+import { useContacts } from "../context/ContactProvider";
 
-export const Content = ({
-  user,
-  chat,
-  onChat,
-  setChat,
-  setOnChat,
-  setChats,
-  setFilteredChats,
-}) => {
+export const Content = ({ onChat, setOnChat }) => {
+  const { user } = useContacts();
+  const { currentChat, messages, sendMessage, closeConversation } =
+    useConversations();
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
   const [onViewer, setOnViewer] = useState(false);
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [messageImages, setMessageImages] = useState([]);
   const [medias, setMedias] = useState({
     images: [],
@@ -32,23 +22,8 @@ export const Content = ({
     document: null,
   });
 
-  useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        const q = getMsgQueryByConversationId(chat.id);
-        onSnapshot(q, (querySnapshot) => {
-          let tmpMessages = [];
-          querySnapshot.forEach((doc) => {
-            tmpMessages.push(dataFromSnapshot(doc));
-          });
-          setMessages(tmpMessages);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    chat && loadMessages();
-  }, [chat]);
+  const friend = currentChat?.friend;
+  const friendId = currentChat?.members.find((id) => id !== user?.uid);
 
   const handleMessageImages = (images) => {
     setMessageImages(images);
@@ -56,14 +31,14 @@ export const Content = ({
   };
 
   const handleCreateMessage = async () => {
-    if (!chat) return;
+    if (!currentChat) return;
     if (!message && !medias?.audio && medias?.images.length === 0) return;
 
     try {
       const msg = {
-        conversationId: chat?.id,
+        conversationId: currentChat?.id,
         sender: user.uid,
-        receiver: chat?.friend?.id,
+        receiver: friendId,
         message,
         viewed: false,
         images: [],
@@ -71,27 +46,15 @@ export const Content = ({
         document: null,
       };
 
-      const res = await createMessageAsync(msg, medias);
-      console.log(res);
-      setMessage("");
-      setMedias((prev) => ({
-        ...prev,
-        images: [],
-        audio: null,
-        document: null,
-      }));
-      if (res) {
-        const currChat = {
-          ...chat,
-          last: { message: res.message, createdAt: res.createdAt },
-        };
-        setChat(currChat);
-        setChats((prev) => [
-          ...prev.map((c) => (c.id === currChat.id ? currChat : c)),
-        ]);
-        setFilteredChats((prev) => [
-          ...prev.map((c) => (c.id === currChat.id ? currChat : c)),
-        ]);
+      const success = sendMessage(msg, medias);
+      if (success) {
+        setMessage("");
+        setMedias((prev) => ({
+          ...prev,
+          images: [],
+          audio: null,
+          document: null,
+        }));
       }
     } catch (error) {
       console.log(error);
@@ -99,14 +62,14 @@ export const Content = ({
   };
 
   return (
-    <div className={chat ? "content active" : "content"}>
-      {chat ? (
+    <div className={currentChat ? "content active" : "content"}>
+      {currentChat ? (
         <div className="content-wrapper">
           <div className="content-top">
             <div className="avatar-infos">
               <div
                 onClick={() => {
-                  setChat(null);
+                  closeConversation(null);
                   setOnChat(false);
                 }}
                 className="back-icon"
@@ -114,14 +77,14 @@ export const Content = ({
                 <i className="fa-solid fa-chevron-left"></i>
               </div>
               <div className="avatar-wrapper">
-                <img
-                  src={
-                    chat?.friend?.profile ? chat?.friend.profile.url : NoAvatar
-                  }
+                <Avatar
+                  height={35}
+                  width={35}
+                  src={friend?.profile ? friend.profile : ""}
                   alt=""
                   className="avatar"
                 />
-                <span className="username">{chat?.friend?.username}</span>
+                <span className="username">{friend?.username}</span>
               </div>
             </div>
 
@@ -134,7 +97,10 @@ export const Content = ({
               <i className="fa-solid fa-ellipsis"></i>
               {onMenu && (
                 <div className="menu-wrapper">
-                  <span className="menu-item" onClick={() => setChat(null)}>
+                  <span
+                    className="menu-item"
+                    onClick={() => closeConversation(null)}
+                  >
                     Close Chat
                   </span>
                   <span className="menu-item">Delete Messages</span>

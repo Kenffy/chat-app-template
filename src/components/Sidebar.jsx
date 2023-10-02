@@ -5,32 +5,26 @@ import { ChatItem } from "./ChatItem";
 import { Profile } from "./Profile";
 import { UserList } from "./UserList";
 import { useContacts } from "../context/ContactProvider";
+import { useConversations } from "../context/ConversationProvider";
 
-export const Sidebar = ({
-  chats,
-  setChats,
-  currentChat,
-  filteredChats,
-  handleSearchChat,
-  setFilteredChats,
-  handleCurrentChat,
-}) => {
+export const Sidebar = () => {
   const { logout, currentUser } = useContacts();
+  const { chats, currentChat, selectConversation, searchConversations } =
+    useConversations();
   const [onMenu, setOnMenu] = useState(false);
   const [onProfile, setOnProfile] = useState(false);
   const [onNewChat, setOnNewChat] = useState(false);
 
+  const handleSearchConversation = (e) => {
+    e.preventDefault();
+    const toSearch = e.target.value;
+    searchConversations(toSearch);
+  };
+
   return (
     <div className="sidebar">
       <Profile open={onProfile} setOpen={setOnProfile} />
-      <UserList
-        open={onNewChat}
-        setOpen={setOnNewChat}
-        chats={chats}
-        setChats={setChats}
-        setFilteredChats={setFilteredChats}
-        handleCurrentChat={handleCurrentChat}
-      />
+      <UserList open={onNewChat} setOpen={setOnNewChat} />
       <div className="sidebar-wrapper">
         <div className="sidebar-top">
           <div className="user-wrapper" onClick={() => setOnProfile(true)}>
@@ -72,7 +66,7 @@ export const Sidebar = ({
         <div className="sidebar-middle">
           <div className="search-wrapper">
             <input
-              onChange={handleSearchChat}
+              onChange={handleSearchConversation}
               type="text"
               placeholder="Search Chat"
             />
@@ -82,12 +76,12 @@ export const Sidebar = ({
 
         <div className="sidebar-bottom">
           <div className="chats-wrapper">
-            {filteredChats.map((chat) => (
+            {chats.map((chat) => (
               <ChatItem
                 key={chat?.id}
-                setChat={() => handleCurrentChat(chat)}
+                setChat={() => selectConversation(chat)}
                 chat={chat}
-                currentChat={currentChat}
+                isActive={chat?.id == currentChat?.id}
               />
             ))}
           </div>

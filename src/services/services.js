@@ -98,10 +98,10 @@ export const getUserAsync = async (id) => {
 };
 
 // Conversations
-export const createConversationAsync = async (user, friendId) => {
+export const createConversationAsync = async (userId, friendId) => {
   try {
     const conv = {
-      members: [user.uid, friendId],
+      members: [userId, friendId],
       last: { message: "", createdAt: null },
       createdAt: serverTimestamp(),
     };
@@ -132,12 +132,12 @@ export const createConversationAsync = async (user, friendId) => {
   }
 };
 
-export const getUserConversationsAsync = async (user) => {
+export const getUserConversationsAsync = async (userId) => {
   try {
     const snapshots = await getDocs(
       query(
         collection(db, "conversations"),
-        where("members", "array-contains", user.uid)
+        where("members", "array-contains", userId)
       )
     );
 
@@ -146,12 +146,10 @@ export const getUserConversationsAsync = async (user) => {
     for (const d of snapshots.docs) {
       let conv = dataFromSnapshot(d);
       if (conv) {
-        const friendId = conv.members.find((u) => u !== user.uid);
+        const friendId = conv.members.find((u) => u !== userId);
         const res = await getDoc(doc(db, "users", friendId));
         const usr = res.data();
-        // if (conv?.message) {
-        //   conv.message = performDataTimetamp(conv.message);
-        // }
+
         conversations.push({
           ...conv,
           friend: {
@@ -242,6 +240,13 @@ export const getMsgQueryByConversationId = (convId) => {
     collection(db, "messages"),
     where("conversationId", "==", convId),
     orderBy("createdAt", "asc")
+  );
+};
+
+export const getConversationQueryByUser = (userId) => {
+  return query(
+    collection(db, "conversations"),
+    where("members", "array-contains", userId)
   );
 };
 

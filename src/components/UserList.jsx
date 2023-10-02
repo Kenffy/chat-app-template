@@ -2,35 +2,16 @@ import "../assets/css/userlist.css";
 import { createConversationAsync } from "../services/services";
 import { useContacts } from "../context/ContactProvider";
 import Avatar from "./Avatar";
+import { useConversations } from "../context/ConversationProvider";
 
-export const UserList = ({
-  open,
-  setOpen,
-  chats,
-  setChats,
-  setFilteredChats,
-  handleCurrentChat,
-}) => {
-  const { user, contacts, searchContacts } = useContacts();
+export const UserList = ({ open, setOpen }) => {
+  const { contacts, searchContacts } = useContacts();
+  const { createConversation } = useConversations();
 
   const handleSearchUsers = async (e) => {
     e.preventDefault();
     var toSearch = e.target.value;
     searchContacts(toSearch);
-  };
-
-  const handleCreateConversation = async (friend) => {
-    const conv = chats.find((c) => c.friend.id === friend.id);
-    if (conv) {
-      handleCurrentChat(conv);
-      setOpen(false);
-    } else {
-      const res = await createConversationAsync(user, friend?.id);
-      setChats((prev) => [...prev, res]);
-      setFilteredChats((prev) => [...prev, res]);
-      handleCurrentChat(res);
-      setOpen(false);
-    }
   };
 
   return (
@@ -61,7 +42,10 @@ export const UserList = ({
               <div
                 key={usr?.id}
                 className="user-item"
-                onClick={() => handleCreateConversation(usr)}
+                onClick={() => {
+                  createConversation(usr?.id);
+                  setOpen(false);
+                }}
               >
                 <Avatar
                   src={usr?.profile ? usr.profile.url : ""}
