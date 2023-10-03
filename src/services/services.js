@@ -132,6 +132,17 @@ export const createConversationAsync = async (userId, friendId) => {
   }
 };
 
+export const deleteConversationAsync = async (conversationId) => {
+  try {
+    await deleteMessagesByConversationId(conversationId);
+    const convDoc = doc(db, "conversations", conversationId);
+    const res = await deleteDoc(convDoc);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getUserConversationsAsync = async (userId) => {
   try {
     const snapshots = await getDocs(
@@ -213,12 +224,26 @@ export const createMessageAsync = async (message, data) => {
   }
 };
 
-export const getMessageByConversationId = async (convId) => {
+export const deleteMessageAsync = async (messageId) => {
+  try {
+    const messageDoc = doc(db, "messages", messageId);
+    const res = await deleteDoc(messageDoc);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteConversationMessagesAsync = async (conversationId) => {
+  await deleteMessagesByConversationId(conversationId);
+};
+
+export const getMessageByConversationId = async (conversationId) => {
   try {
     const snapshots = await getDocs(
       query(
         collection(db, "messages"),
-        where("conversationId", "==", convId),
+        where("conversationId", "==", conversationId),
         orderBy("createdAt", "asc")
       )
     );
@@ -248,6 +273,27 @@ export const getConversationQueryByUser = (userId) => {
     collection(db, "conversations"),
     where("members", "array-contains", userId)
   );
+};
+
+const deleteMessagesByConversationId = async (conversationId) => {
+  try {
+    const snapshots = await getDocs(
+      query(
+        collection(db, "messages"),
+        where("conversationId", "==", conversationId)
+      )
+    );
+    for (const d of snapshots.docs) {
+      await deleteDoc(d.ref);
+    }
+
+    const convDoc = doc(db, "conversations", conversationId);
+    await updateDoc(convDoc, {
+      last: { message: null, createdAt: serverTimestamp() },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const uploadImages = async (images, location) => {

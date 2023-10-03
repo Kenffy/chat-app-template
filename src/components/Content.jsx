@@ -9,8 +9,14 @@ import { useContacts } from "../context/ContactProvider";
 
 export const Content = ({ onChat, setOnChat }) => {
   const { user } = useContacts();
-  const { currentChat, messages, sendMessage, closeConversation } =
-    useConversations();
+  const {
+    currentChat,
+    messages,
+    sendMessage,
+    closeConversation,
+    deleteConversationMessages,
+    deleteConversation,
+  } = useConversations();
   const [onMenu, setOnMenu] = useState(false);
   const [onMedia, setOnMedia] = useState(false);
   const [onViewer, setOnViewer] = useState(false);
@@ -103,8 +109,18 @@ export const Content = ({ onChat, setOnChat }) => {
                   >
                     Close Chat
                   </span>
-                  <span className="menu-item">Delete Messages</span>
-                  <span className="menu-item">Delete Chat</span>
+                  <span
+                    onClick={deleteConversationMessages}
+                    className="menu-item"
+                  >
+                    Delete Messages
+                  </span>
+                  <span
+                    onClick={() => deleteConversation(currentChat?.id)}
+                    className="menu-item"
+                  >
+                    Delete Chat
+                  </span>
                 </div>
               )}
             </div>

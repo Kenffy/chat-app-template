@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useContacts } from "./ContactProvider";
-import { v4 as getID } from "uuid";
 import {
   createConversationAsync,
   createMessageAsync,
   dataFromSnapshot,
+  deleteConversationAsync,
+  deleteConversationMessagesAsync,
+  deleteMessageAsync,
   getConversationQueryByUser,
   getMsgQueryByConversationId,
 } from "../services/services";
@@ -51,6 +53,7 @@ export const ConversationProvider = ({ children }) => {
         const res = await createConversationAsync(currentUser.id, contactId);
         if (res) {
           setCurrentConversation(res);
+          setConversationId(res.id);
           success = true;
         }
         return success;
@@ -71,21 +74,33 @@ export const ConversationProvider = ({ children }) => {
     setCurrentConversation(null);
   };
 
-  // const handleDeleteMessages = () => {
-  //   if (currConversation == null) return;
+  const handleDeleteMessage = async (messageId) => {
+    if (!messageId) return;
+    try {
+      await deleteMessageAsync(messageId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  //   const selectedConversation = currConversation;
-  //   selectedConversation.messages = [];
-  //   setConversations((prev) =>
-  //     prev.map((conv) =>
-  //       conv.id === selectedConversation?.id ? selectedConversation : conv
-  //     )
-  //   );
-  // };
+  const handleDeleteMessages = async () => {
+    if (currentConversation == null) return;
 
-  // const handleDeleteConversation = (id) => {
-  //   setConversations((prev) => prev.filter((conv) => conv.id !== id));
-  // };
+    try {
+      await deleteConversationMessagesAsync(currentConversation.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteConversation = async (convId) => {
+    if (!convId) return;
+    try {
+      await deleteConversationAsync(convId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const unsubcribe = loadConversations();
@@ -144,7 +159,6 @@ export const ConversationProvider = ({ children }) => {
 
   const sendMessage = async (message, medias) => {
     let success = false;
-    console.log(message);
     try {
       const res = await createMessageAsync(message, medias);
       if (res) {
@@ -172,8 +186,9 @@ export const ConversationProvider = ({ children }) => {
     createConversation,
     selectConversation: handleCurrentConversation,
     closeConversation: handleCloseConversation,
-    // deleteConversation: handleDeleteConversation,
-    // deleteConversationMessages: handleDeleteMessages,
+    deleteMessage: handleDeleteMessage,
+    deleteConversation: handleDeleteConversation,
+    deleteConversationMessages: handleDeleteMessages,
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
